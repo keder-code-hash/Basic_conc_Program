@@ -1,0 +1,152 @@
+##
+
+The make utility requires a makefile,which defines a set of task to be executed.
+
+1.creating a file as 'Makefile'
+
+2.Basic Syntax:
+	
+target:prerequisite
+	<recipe>
+
+Now,the prerequisite can also be a taget which depneds on othger dependencies:-
+more precisely,
+
+target: sub_target final.c
+	RECIPE_TO_create_final_target
+sub_target: subtarget.c
+	RECIPE_TO_create_sub_target
+
+-------------------------------------------------------	
+It is not always necessary,that a target sholud always be a file,it could be a name of recipe.we call this as "PHONY TARGETS".
+	
+	as example,
+generate:
+	@echo "creating a file"
+	touch newfile.txt
+Here generate will be a phony target bcaz,it is not a file.
+**To suppress echoing the actual command, we need to start echo with @.
+--------------------------------------------------------
+
+Execution:->
+.............................................
+hello:
+	echo "hello"
+generate:
+	echo "creating a file"
+	touch newfile.txt
+clean:
+	echo "clean all"
+	rm *.txt
+
+Here,if we does not add a .DEFAULT_GOAL	 ,only hello will be executed.
+
+.DEFAULT_GOAL=generate
+hello:
+	echo "hello"
+generate:
+	echo "creating a file"
+	touch newfile.txt
+clean:
+	echo "clean all"
+	rm *.txt
+
+Now,as a default generate will be only executed.
+.DEFAULT_GOAL only run a single target at a time.
+
+....................................................
+Now to run multiple we have to use 'all' as a target :-->
+
+all=hello generate clean
+hello:
+	echo "hello"
+generate:
+	echo "creating a file"
+	touch newfile.txt
+clean:
+	echo "clean all"
+	rm *.txt
+
+Now, all three target will be executed as order.
+
+...............................................
+A phony target is one that is not really the name of a file. It is just a name for some commands to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance. 
+
+ If you write a rule whose commands will not create the target file, the commands will be executed every time the target comes up for remaking. Here is an example:
+
+clean:
+        rm *.o temp
+
+Because the rm command does not create a file named `clean', probably no such file will ever exist. Therefore, the rm command will be executed every time you say `make clean'.
+
+The phony target will cease to work if anything ever does create a file named `clean' in this directory. Since it has no dependencies, the file `clean' would inevitably be considered up to date, and its commands would not be executed. To avoid this problem, you can explicitly declare the target to be phony, using the special target .PHONY (see section Special Built-in Target Names) as follows:
+
+.PHONY : clean
+
+Once this is done, `make clean' will run the commands regardless of whether there is a file named `clean'
+
+
+
+
+we can also do that using a default .PHONY  target
+
+all hello generate clean
+.PHONY= hello clean
+hello:
+	echo "hello"
+generate:
+	echo "creating a file"
+	touch newfile.txt
+clean:
+	echo "clean all"
+	rm *.txt
+
+Here, all the target will be executed also.
+
+--------------------------------------------------------------------------------------
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
